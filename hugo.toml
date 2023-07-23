@@ -1,0 +1,45 @@
+baseURL = "http://blog.eiboeck.de/"
+languageCode = "de-DE"
+title = "realholgis Blog"
+theme = "m10c"
+paginate = 8
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "tags"
+    name = "Tags"
+    url = "/tags/"
+    weight = 2
+  [[menu.main]]
+    identifier = "about"
+    name = "About"
+    url = "/about/"
+    weight = 3
+
+[params]
+  author = "Holger Eiboeck"
+  description = "Maybe interesting stuff..."
+  menu_item_separator = " | "
+
+  [[params.social]]
+    icon = "github"
+    name = "Github"
+    url = "https://github.com/realholgi"
+  [[params.social]]
+    icon = "mastodon"
+    name = "Mastodon"
+    url = "https://chaos.social/@realholgi"
+
+  # Default theme
+  #[params.style]
+  #  darkestColor = "#242930"
+  #  darkColor = "#353b43"
+  #  lightColor = "#afbac4"
+  #  lightestColor = "#ffffff"
+  #  primaryColor = "#57cc8a"
+
