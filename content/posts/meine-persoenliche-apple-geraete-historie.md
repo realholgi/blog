@@ -19,7 +19,7 @@ Hier die Liste meiner bisherigen Apple Geräte anläßlich [Apples 30-jährigen 
   - Apple Macintosh Centris 650 (Upgrade des IIvx)
 
 - 1995
-  - Apple Power Macintosh 7100>
+  - Apple Power Macintosh 7100
 
 - 1996
   - Apple Newton Messagepad 130
