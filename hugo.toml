@@ -2,7 +2,7 @@ baseURL = "http://blog.eiboeck.de/"
 languageCode = "de-DE"
 title = "realholgis Blog"
 theme = "m10c"
-paginate = 10
+pagination.pagerSize = 10
 
 [menu]
   [[menu.main]]
