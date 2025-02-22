@@ -1,0 +1,3 @@
+# Holgi's Ancient Blog
+
+This is an archive for collecting some of my old blogging stuff which I found worthy to preserve...
