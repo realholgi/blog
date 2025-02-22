@@ -33,7 +33,7 @@ paginate = 10
   [[params.social]]
     icon = "mastodon"
     name = "Mastodon"
-    url = "https://chaos.social/@realholgi"
+    url = "https://23.social/@realholgi"
 
   # Default theme
   #[params.style]
