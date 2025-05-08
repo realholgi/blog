@@ -1,0 +1,38 @@
+name: Convert Mastodon Posts to Markdown
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'  # Run every 6 hours
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm pkg set type=module
+          npm install mastodon-api fs path glob gray-matter
+
+      - name: Run conversion script
+        env:
+          MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+          MASTODON_URL: ${{ secrets.MASTODON_URL }}
+          MASTODON_TAG: ${{ secrets.MASTODON_TAG }}
+        run: node scripts/convert-posts.js
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add output/
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update markdown files from Mastodon posts" && git push)
