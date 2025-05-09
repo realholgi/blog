@@ -13,7 +13,7 @@ const https = require('https');
 // Configuration
 const MASTODON_URL = process.env.MASTODON_URL;
 const ACCESS_TOKEN = process.env.MASTODON_ACCESS_TOKEN;
-const HASHTAG = 'ta';
+const HASHTAG = process.env.MASTODON_HASHTAG;
 const OUTPUT_DIR = path.join(__dirname, '../content/posts');
 const MEDIA_DIR = path.join(__dirname, '../images/posts');
 
