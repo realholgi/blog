@@ -36,4 +36,11 @@ jobs:
           git config --global user.email 'action@github.com'
           git add content/posts/
           git add static/images/posts/
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update markdown files from Mastodon posts" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update markdown files from Mastodon posts")
+          # && git push
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          branch: ${{ github.ref }}
