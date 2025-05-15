@@ -3,6 +3,8 @@ name: Deploy Hugo site to Pages
 
 on:
   # Runs on pushes targeting the default branch
+  repository_dispatch:
+    types: [trigger-hugo]
   push:
     paths:
       - 'static/**'
