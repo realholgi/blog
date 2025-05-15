@@ -27,8 +27,8 @@ jobs:
         env:
           MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
           MASTODON_URL: ${{ secrets.MASTODON_URL }}
-          MASTODON_HASHTAG: ${{ MASTODON_HASHTAG }}
-          MAX_POSTS: ${{ MAX_POSTS }}
+          MASTODON_HASHTAG: ${{ secrets.MASTODON_HASHTAG }}
+          MAX_POSTS: ${{ secrets.MAX_POSTS }}
         run: node scripts/convert-posts.js
 
       - name: Commit and push changes
