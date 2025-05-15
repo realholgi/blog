@@ -14,6 +14,7 @@ const https = require('https');
 const MASTODON_URL = process.env.MASTODON_URL;
 const ACCESS_TOKEN = process.env.MASTODON_ACCESS_TOKEN;
 const HASHTAG = process.env.MASTODON_HASHTAG;
+const MAX_POSTS = process.env.MAX_POSTS;
 const OUTPUT_DIR = path.join(__dirname, '../content/posts');
 const MEDIA_DIR = path.join(__dirname, '../images/posts');
 
@@ -38,7 +39,7 @@ async function fetchTaggedPosts() {
     const accountId = account.data.id;
     
     // Fetch statuses
-    const statuses = await M.get(`accounts/${accountId}/statuses`, { limit: 500 });
+    const statuses = await M.get(`accounts/${accountId}/statuses`, { limit: MAX_POSTS });
     
     // Filter for posts with the #ta hashtag
     const taggedPosts = statuses.data.filter(post => {
