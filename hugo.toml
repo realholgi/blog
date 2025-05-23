@@ -1,4 +1,4 @@
-baseURL = "http://blog.eiboeck.de/"
+baseURL = "https://blog.eiboeck.de/"
 languageCode = "de-DE"
 title = "realholgis Blog"
 theme = "m10c"
