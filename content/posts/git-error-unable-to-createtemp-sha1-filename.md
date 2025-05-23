@@ -1,6 +1,6 @@
 ---
 title: "git problem error: unable to create temporary sha1 filename"
-tags: ["git", "tip"]
+tags: [ "git", "tip" ]
 date: 2012-10-24T21:40:34+01:00
 draft: false
 ---
