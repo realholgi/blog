@@ -85,7 +85,8 @@ date: "${post.created_at}"
 `;
   
   let header = ``;
-  
+  let title_pic = ``;
+
   // Handle first media attachments
   if (post.media_attachments && post.media_attachments.length > 0) {
     
@@ -102,7 +103,8 @@ date: "${post.created_at}"
         
       // Add relative path to the markdown
       const relativeMediaPath = path.relative(OUTPUT_DIR, mediaFilePath).replace(/\\/g, '/');
-      content += `banner: ../${relativeMediaPath}`
+      title_pic = `../${relativeMediaPath}`
+      content += `banner: ${title_pic}`
       header = `${media.description}`;
     }
   }
@@ -120,7 +122,11 @@ date: "${post.created_at}"
   postContent = postContent.trim();
   
   if (header) {
-  		postContent = `# ${header}\n\n` + postContent;
+        if (title_pic) {
+          postContent = `# [${header}](${title_pic})\n\n` + postContent;
+        } else {
+          postContent = `# ${header}\n\n` + postContent;
+        }
   }
   content += '\n\n' + postContent;
 
