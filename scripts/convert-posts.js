@@ -49,7 +49,7 @@ async function fetchTaggedPosts() {
 
         console.log(`Found ${taggedPosts.length} posts with #${HASHTAG} hashtag`);
 
-        // Convert each post to markdown
+        // Convert each post to Markdown
         for (const post of taggedPosts) {
             await convertPostToMarkdown(post);
         }
@@ -79,9 +79,6 @@ async function convertPostToMarkdown(post) {
     // Create frontmatter
     let content = `---
 id: "${post.id}"
-title: "Te Araroa Trail - ${germanDate}"
-tags: ["ta"]
-date: "${post.created_at}"
 `;
 
     let header = ``;
@@ -101,21 +98,25 @@ date: "${post.created_at}"
             // Download the media file
             await downloadFile(mediaUrl, mediaFilePath);
 
-            // Add relative path to the markdown
+            // Add relative path to the Markdown
             const relativeMediaPath = path.relative(OUTPUT_DIR, mediaFilePath).replace(/\\/g, '/');
             title_pic = `../${relativeMediaPath}`
             content += `banner: ${title_pic}`
-            header = `${media.description}`;
+            header = `${media.description.trim()}`;
         }
     }
 
-    content += `\n---`;
+    content += `
+title: "Te Araroa Trail - ${germanDate} - ${header}"
+tags: ["ta"]
+date: "${post.created_at}"
+---`;
 
 
     // Add content (remove HTML tags and the #ta hashtag)
     let postContent = post.content.replace(/<[^>]*>/g, '');
 
-    // Remove the #ta hashtag (case insensitive)
+    // Remove the #ta hashtag (case-insensitive)
     postContent = postContent.replace(new RegExp(`#${HASHTAG}\\b`, 'gi'), '');
 
     // Trim extra whitespace that might be left after removing the tag
@@ -130,7 +131,7 @@ date: "${post.created_at}"
     }
     content += '\n\n' + postContent;
 
-    // Handle other  media attachments
+    // Handle other media attachments
     if (post.media_attachments && post.media_attachments.length > 1) {
 
         // Download each media attachment
@@ -145,9 +146,9 @@ date: "${post.created_at}"
                 // Download the media file
                 await downloadFile(mediaUrl, mediaFilePath);
 
-                // Add relative path to the markdown
+                // Add relative path to the Markdown
                 const relativeMediaPath = path.relative(OUTPUT_DIR, mediaFilePath).replace(/\\/g, '/');
-                content += `![${media.description || 'Image'}](../${relativeMediaPath})\n`;
+                content += `![${media.description.trim() || 'Image'}](../${relativeMediaPath})\n`;
             }
         }
     }
