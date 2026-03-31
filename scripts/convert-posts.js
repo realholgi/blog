@@ -38,19 +38,48 @@ async function fetchTaggedPosts() {
         const account = await M.get('accounts/verify_credentials', {});
         const accountId = account.data.id;
 
-        // Fetch statuses
-        const statuses = await M.get(`accounts/${accountId}/statuses`, {limit: MAX_POSTS});
+        let allTaggedPosts = [];
+        let maxId = null;
+        let hasMore = true;
 
-        // Filter for posts with the #ta hashtag
-        const taggedPosts = statuses.data.filter(post => {
-            const tags = post.tags.map(tag => tag.name.toLowerCase());
-            return tags.includes(HASHTAG.toLowerCase());
-        });
+        while (hasMore) {
+            // Fetch statuses with pagination
+            const params = { limit: 40 }; // Max limit per request
+            if (maxId) {
+                params.max_id = maxId;
+            }
 
-        console.log(`Found ${taggedPosts.length} posts with #${HASHTAG} hashtag`);
+            const statuses = await M.get(`accounts/${accountId}/statuses`, params);
+
+            if (statuses.data.length === 0) {
+                hasMore = false;
+                break;
+            }
+
+            // Filter for posts with the hashtag
+            const taggedPosts = statuses.data.filter(post => {
+                const tags = post.tags.map(tag => tag.name.toLowerCase());
+                return tags.includes(HASHTAG.toLowerCase());
+            });
+
+            allTaggedPosts = allTaggedPosts.concat(taggedPosts);
+
+            // Set up for next iteration
+            maxId = statuses.data[statuses.data.length - 1].id;
+
+            // Optional: Stop if we've reached MAX_POSTS tagged posts
+            if (MAX_POSTS && allTaggedPosts.length >= parseInt(MAX_POSTS)) {
+                allTaggedPosts = allTaggedPosts.slice(0, parseInt(MAX_POSTS));
+                hasMore = false;
+            }
+
+            console.log(`Fetched batch, found ${taggedPosts.length} tagged posts (total: ${allTaggedPosts.length})`);
+        }
+
+        console.log(`Found ${allTaggedPosts.length} posts with #${HASHTAG} hashtag`);
 
         // Convert each post to Markdown
-        for (const post of taggedPosts) {
+        for (const post of allTaggedPosts) {
             await convertPostToMarkdown(post);
         }
     } catch (error) {
