@@ -177,7 +177,7 @@ date: "${post.created_at}"
 
                 // Add relative path to the Markdown
                 const relativeMediaPath = path.relative(OUTPUT_DIR, mediaFilePath).replace(/\\/g, '/');
-                content += `![${media.description.trim() || 'Image'}](../${relativeMediaPath})\n`;
+                content += `![${media.description.trim() || 'Image'}](../${relativeMediaPath}) ${media.description.trim()}\n`;
             }
         }
     }
@@ -186,7 +186,7 @@ date: "${post.created_at}"
     // Write to file
     fs.writeFileSync(filePath, content);
 
-    console.log(`Created markdown file: ${fileName}`);
+    console.log(`Created Markdown file: ${fileName}`);
 }
 
 function downloadFile(url, destination) {
