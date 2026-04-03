@@ -93,11 +93,6 @@ async function convertPostToMarkdown(post) {
     const postId = post.id;
     const fileName = `${formattedDate}-${postId}.md`;
     const filePath = path.join(OUTPUT_DIR, fileName);
-    const germanDate = new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).format(date);
 
     // Create post-specific media directory
     const postMediaDir = path.join(MEDIA_DIR, postId);
@@ -135,13 +130,6 @@ id: "${post.id}"
         }
     }
 
-    content += `
-title: "Te Araroa Trail - ${germanDate} - ${header}"
-tags: ["ta"]
-date: "${post.created_at}"
----`;
-
-
     // Add content (remove HTML tags and the #ta hashtag)
     let postContent = post.content.replace(/<[^>]*>/g, '');
 
@@ -158,7 +146,24 @@ date: "${post.created_at}"
             postContent = `# ${header}\n\n` + postContent;
         }
     }
-    content += '\n\n' + postContent;
+
+    // Extract date from postContent if present in format [date: yyyy-mm-dd]
+    const datePattern = /\[date:\s*(\d{4}-\d{2}-\d{2})\]/i;
+    const dateMatch = postContent.match(datePattern);
+    let postDate = dateMatch ? new Date(dateMatch[1] + 'T00:00:00.000Z') : new Date(post.created_at);
+
+    const germanDate = new Intl.DateTimeFormat('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).format(postDate);
+
+    // Remove the [date:...] from postContent
+    postContent = postContent.replace(datePattern, '').trim();
+
+    content += `\ntitle: "Te Araroa Trail - ${germanDate} - ${header}"\ntags: ["ta"]\n`;
+    content +=`date: "${postDate.toISOString()}"\n---\n\n`
+    content += postContent;
 
     // Handle other media attachments
     if (post.media_attachments && post.media_attachments.length > 1) {
