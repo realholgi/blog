@@ -54,7 +54,7 @@ async function fetchTaggedPosts() {
 
         while (hasMore) {
             // Fetch statuses with pagination
-            const params = { limit: 40 }; // Max limit per request
+            const params = {limit: 40}; // Max limit per request
             if (maxId) {
                 params.max_id = maxId;
             }
@@ -111,9 +111,7 @@ async function convertPostToMarkdown(post) {
     }
 
     // Create frontmatter
-    let content = `---
-id: "${post.id}"
-`;
+    let content = `---\nid: "${post.id}"\n`;
 
     let header = ``;
     let title_pic = ``;
@@ -150,11 +148,11 @@ id: "${post.id}"
     postContent = postContent.trim();
 
     if (header) {
-        if (title_pic) {
-            postContent = `# [${header}](${title_pic})\n\n` + postContent;
-        } else {
-            postContent = `# ${header}\n\n` + postContent;
-        }
+        const heading = title_pic
+            ? `# [${header}](${title_pic})`
+            : `# ${header}`;
+
+        postContent = `${heading}\n\n${postContent}`;
     }
 
     // Extract date from postContent if present
@@ -167,7 +165,7 @@ id: "${post.id}"
     postContent = postContent.replace(POST_DATE_PATTERN, '').trim();
 
     content += `\ntitle: "Te Araroa Trail - ${formatGermanDate(postDate)} - ${header}"\ntags: ["ta"]\n`;
-    content +=`date: "${postDate.toISOString()}"\n---\n\n`
+    content += `date: "${postDate.toISOString()}"\n---\n\n`
     content += postContent;
 
     // Handle other media attachments
