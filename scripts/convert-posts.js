@@ -17,20 +17,30 @@ const HASHTAG = process.env.MASTODON_HASHTAG;
 const MAX_POSTS = process.env.MAX_POSTS;
 const OUTPUT_DIR = path.join(__dirname, '../content/posts');
 const MEDIA_DIR = path.join(__dirname, '../images/posts');
+const POST_DATE_PATTERN = /\[date:\s*(\d{4}-\d{2}-\d{2})\]/i;
 
-// Ensure directories exist
-if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, {recursive: true});
+function ensureDir(dirPath) {
+    if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, {recursive: true});
+    }
 }
-if (!fs.existsSync(MEDIA_DIR)) {
-    fs.mkdirSync(MEDIA_DIR, {recursive: true});
-}
+
+ensureDir(OUTPUT_DIR);
+ensureDir(MEDIA_DIR);
 
 // Initialize Mastodon client
 const M = new Mastodon({
     access_token: ACCESS_TOKEN,
     api_url: `${MASTODON_URL}/api/v1/`,
 });
+
+function formatGermanDate(date) {
+    return new Intl.DateTimeFormat('de-DE', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).format(date);
+}
 
 async function fetchTaggedPosts() {
     try {
@@ -147,21 +157,16 @@ id: "${post.id}"
         }
     }
 
-    // Extract date from postContent if present in format [date: yyyy-mm-dd]
-    const datePattern = /\[date:\s*(\d{4}-\d{2}-\d{2})\]/i;
-    const dateMatch = postContent.match(datePattern);
-    let postDate = dateMatch ? new Date(dateMatch[1] + 'T00:00:00.000Z') : new Date(post.created_at);
+    // Extract date from postContent if present
+    const dateResult = postContent.match(POST_DATE_PATTERN);
+    const extractedDate = dateResult?.[1];
+    const postDate = extractedDate
+        ? new Date(`${extractedDate}T00:00:00.000Z`)
+        : new Date(post.created_at);
 
-    const germanDate = new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).format(postDate);
+    postContent = postContent.replace(POST_DATE_PATTERN, '').trim();
 
-    // Remove the [date:...] from postContent
-    postContent = postContent.replace(datePattern, '').trim();
-
-    content += `\ntitle: "Te Araroa Trail - ${germanDate} - ${header}"\ntags: ["ta"]\n`;
+    content += `\ntitle: "Te Araroa Trail - ${formatGermanDate(postDate)} - ${header}"\ntags: ["ta"]\n`;
     content +=`date: "${postDate.toISOString()}"\n---\n\n`
     content += postContent;
 
