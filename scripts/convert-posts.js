@@ -34,14 +34,6 @@ const M = new Mastodon({
     api_url: `${MASTODON_URL}/api/v1/`,
 });
 
-function formatGermanDate(date) {
-    return new Intl.DateTimeFormat('de-DE', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-    }).format(date);
-}
-
 async function fetchTaggedPosts() {
     try {
         // Get user ID first
@@ -164,7 +156,7 @@ async function convertPostToMarkdown(post) {
 
     postContent = postContent.replace(POST_DATE_PATTERN, '').trim();
 
-    content += `\ntitle: "Te Araroa Trail - ${formatGermanDate(postDate)} - ${header}"\ntags: ["ta"]\n`;
+    content += `\ntitle: "Te Araroa Trail - ${header}"\ntags: ["ta"]\n`;
     content += `date: "${postDate.toISOString()}"\n---\n\n`
     content += postContent;
 
