@@ -159,6 +159,9 @@ async function convertPostToMarkdown(post) {
     content += `\ntitle: "Te Araroa Trail - ${header}"\ntags: ["ta"]\n`;
     content += `date: "${postDate.toISOString()}"\n---\n\n`
     content += postContent;
+    content += title_pic
+        ? `\n\n![${header}](${title_pic}) ${header}\n`
+        : '\n';
 
     // Handle other media attachments
     if (post.media_attachments && post.media_attachments.length > 1) {
