@@ -1,9 +1,6 @@
-{{ if .Params.tags }}
-  {{ if in .Params.tags "ta" }}
-    <style>
-      img.inline { width: 60%; }
-    </style>
-  {{ end }}
+{{ $image := .Params.image }}
+{{ if and $image (not (in $.Params.tags "ta")) }}
+  <img src="{{ $image }}" alt="{{ .Title }}">
+{{ else if and $image (in $.Params.tags "ta") }}
+  <img src="{{ $image }}" style="width: 60%;" alt="{{ .Title }}">
 {{ end }}
-
-{{ .Content | safeHTML }}
