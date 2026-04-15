@@ -4,3 +4,4 @@ resources/_gen
 /package.json
 /package-lock.json
 /node_modules
+scripts/set-local-env.sh
