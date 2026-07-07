@@ -19,7 +19,7 @@ const MAX_POSTS = process.env.MAX_POSTS;
 const OUTPUT_DIR = path.join(__dirname, '../content/posts');
 const MEDIA_DIR = path.join(__dirname, '../images/posts');
 
-const POST_DATE_PATTERN = /\[d a t e:\s*(\d{4}-\d{2}-\d{2})\]/i;
+const POST_DATE_PATTERN = /\[date:\s*(\d{4}-\d{2}-\d{2})\]/i;
 
 function ensureDir(dirPath) {
   if (!fs.existsSync(dirPath)) {
